@@ -1,6 +1,11 @@
 terraform {
+  backend "s3" {
+    bucket         = "terraform-test-emilija"
+    region         = "eu-north-1"
+    key            = "s3-github-actions/terraform.tfstate"
+    encrypt = true
+  }
   required_version = ">= 1.6.0"
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
