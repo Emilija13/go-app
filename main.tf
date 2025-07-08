@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "terraform-test-emilija"
-    region         = "eu-north-1"
+    region         = "us-east-1"
     key            = "s3-github-actions/terraform.tfstate"
     encrypt = true
   }
