@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/Emilija13/go-app.git'
+    targetRevision: main   # branch
+    path: myapp            # folder where Helm chart lives
+    helm:
+      valueFiles:
+        - values.yaml      # adjust if you use custom values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
