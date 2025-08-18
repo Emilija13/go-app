@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: {{ include "myapp.name" . }}
+      annotations:
+        configHash: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
