@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket         = "terraform-test-emilijaa"
-    region         = "us-east-1"
-    key            = "s3-github-actions/terraform.tfstate"
+    bucket  = "terraform-test-emilijaa"
+    region  = "us-east-1"
+    key     = "s3-github-actions/terraform.tfstate"
     encrypt = true
   }
   required_version = ">= 1.6.0"
@@ -73,11 +73,24 @@ resource "aws_security_group" "eks_cluster_sg" {
   name   = "eks-cluster-sg"
   vpc_id = aws_vpc.main.id
 
+  ingress {
+    protocol  = "-1"
+    from_port = 0
+    to_port   = 0
+    self      = true
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    protocol  = "-1"
+    from_port = 0
+    to_port   = 0
+    self      = true
   }
 
   tags = {
@@ -146,7 +159,7 @@ resource "aws_eks_cluster" "eks" {
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = aws_subnet.public[*].id
+    subnet_ids         = aws_subnet.public[*].id
     security_group_ids = [aws_security_group.eks_cluster_sg.id]
   }
 
@@ -158,6 +171,7 @@ resource "aws_eks_node_group" "default" {
   node_group_name = "default"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = aws_subnet.public[*].id
+  instance_types  = ["t3.micro"]
 
   scaling_config {
     desired_size = 2
