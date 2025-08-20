@@ -28,6 +28,16 @@ func main() {
 		fmt.Fprintf(w, message)
 	})
 
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("ok"))
+	})
+
+	http.HandleFunc("/readyz", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("ready"))
+	})
+
 	port := "8080"
 	log.Printf("Starting server on port %s\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":"+port), nil))
