@@ -38,6 +38,17 @@ func main() {
 		w.Write([]byte("ready"))
 	})
 
+	http.HandleFunc("/load", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Starting CPU load..."))
+
+		go func() {
+			for i := 0; i < 1000000000; i++ {
+				_ = i * i
+			}
+		}()
+	})
+
 	port := "8080"
 	log.Printf("Starting server on port %s\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":"+port), nil))

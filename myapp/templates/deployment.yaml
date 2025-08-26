@@ -5,7 +5,6 @@ metadata:
   labels:
     {{- include "myapp.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ include "myapp.name" . }}
@@ -25,6 +24,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "myapp.fullname" . }}-config
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
           startupProbe:
             httpGet:
               path: /readyz
